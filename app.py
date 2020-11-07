@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_restful import Api
 from flask_jwt import JWT
 from security import authenticate, identity as identity_function
@@ -48,6 +48,12 @@ api.add_resource(ItemList, '/items')
 api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
 
+@app.route("/")
+@app.route("/index")
+@app.route("/home")
+def index():
+    return render_template("index.html")
+    
 
 if __name__ == '__main__':
     from db import db
