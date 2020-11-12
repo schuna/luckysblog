@@ -1,4 +1,5 @@
 import os
+import logging
 
 from flask import Flask, request, jsonify, render_template, request, session, redirect, flash, url_for
 from flask_jwt import JWT
@@ -68,6 +69,7 @@ def register():
 
     if request.method == 'POST':
         user_id = UserModel.count()
+        app.logger.info(user_id)
         user_id += 1
         email = request.form['email']
         password = request.form['password']
