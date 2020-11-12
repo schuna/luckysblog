@@ -21,10 +21,10 @@
             </li>
 
 
-            {% if not session['username'] %}
+            <!-- {% if not session['username'] %}
             <li class="nav-item"><a href="{{ url_for('register')}}"
                                     class="nav-link {% if register %}active{% endif %}">Register</a></li>
-            {% endif %}
+            {% endif %} -->
 
             {% if not session['username'] %}
             <li class="nav-item"><a href="{{ url_for('login') }}"
