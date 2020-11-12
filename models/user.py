@@ -4,12 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class UserModel(db.Model):
     __tablename__ = 'users'
-    
+
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     email = db.Column(db.String(50))
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(120))
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
