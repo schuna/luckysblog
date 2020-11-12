@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h4 class="mb-3">User Register</h4>
+
+    <form method="POST" role="form" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="email" class="sr-only">Email address</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email address"
+                       required
+                       autofocus>
+                <div class="invalid-feedback">
+                    Valid email is required.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+                       required>
+                <div class="invalid-feedback">
+                    Valid password is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="first_name" class="sr-only">First Name</label>
+            <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name"
+                   required>
+            <div class="invalid-feedback">
+                First Name is required.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="last_name" class="sr-only">Last Name</label>
+            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name"
+                   required>
+            <div class="invalid-feedback">
+                Last Name is required.
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+
+    </form>
+</div>
+
+{% endblock %}
