@@ -86,7 +86,7 @@ def upload():
     user = UserModel.find_by_id(user_id=session['user_id'])
     if request.method == "POST":
         description = request.form.get('description')
-        image_path = request.form.get('image_path').replace("view?usp=sharing", "preview")
+        image_path = request.form.get('image_path').split('?')[0].replace("view", "preview")
         try:
             post = Posts(description=description, image_path=image_path, user_id=user.user_id)
             post.save()
