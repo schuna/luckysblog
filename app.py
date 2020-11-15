@@ -81,30 +81,34 @@ def allowed_file(filename):
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
+    if not session.get('username'):
+        return redirect(url_for('index'))
     user = UserModel.find_by_id(user_id=session['user_id'])
-
     if request.method == "POST":
         description = request.form.get('description')
-        file = request.files['file']
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            static_path = os.path.join('static', 'images')
-            # file save
-            abs_path = os.path.join(os.getcwd(), static_path)
-            local_path = os.path.join(abs_path, filename)
-            file.save(local_path)
-            # db update
-            relative_path = os.path.join('.', static_path)
-            url_path = os.path.join(relative_path, filename)
-            post = Posts(description=description, image_path=url_path, user_id=user.user_id)
+        image_path = request.form.get('image_path')
+        try:
+            post = Posts(description=description, image_path=image_path, user_id=user.user_id)
             post.save()
             flash("Successfully uploaded!", "success")
             return render_template("dbview.html", Users = UserModel.get_list_of_dict(), Posts = Posts.get_list_of_dict(), dbview=True)
-        else:
+        except:
             flash("Somethings went wrong!", "danger")
-
+            return redirect(url_for('index'))
     return render_template("upload.html", upload=True)
+
+
+@app.route('/delete/<post_id>', methods=['GET', 'POST'])
+def delete(post_id):
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    try:
+        post = Posts.find_by_id(post_id)
+        post.delete()
+        flash("Successfully deleted!", "success")
+    except:
+        flash("Somethings went wrong!", "danger")
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
@@ -115,4 +119,4 @@ if __name__ == '__main__':
         def create_tables():
             db.create_all()
 
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)

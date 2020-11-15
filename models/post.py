@@ -16,6 +16,14 @@ class Posts(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     @classmethod
     def get_list_of_dict(cls):
-        return [r.__dict__ for r in cls.query.filter_by().all()]
+        return [r.__dict__ for r in cls.query.filter_by().order_by(Posts.post_id.desc()).all()]
+
+    @classmethod
+    def find_by_id(cls, post_id):
+        return cls.query.filter_by(post_id=post_id).first()
