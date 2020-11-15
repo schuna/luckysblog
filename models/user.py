@@ -33,8 +33,8 @@ class UserModel(db.Model):
         return cls.query.filter_by().count()
 
     @classmethod
-    def find_all(cls):
-        return cls.query.filter_by().all()
+    def get_list_of_dict(cls):
+        return [r.__dict__ for r in cls.query.filter_by().all()]
 
     def save(self):
         db.session.add(self)

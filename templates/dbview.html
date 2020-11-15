@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-sm mt-5">
+  <h1 class="mb-3">Users</h1>
+  <table class="table table-striped table-bordered table-hover" id="userview" style="width:100%">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in Users %}
+      <tr>
+        <td scope="row">{{ user['user_id'] }}</td>
+        <td scope="row">{{ user['first_name'] }}</td>
+        <td scope="row">{{ user['last_name'] }}</td>
+        <td scope="row">{{ user['email'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+<div class="container-sm mt-5">
+  <h1 class="mb-3">Posts</h1>
+  <table class="table table-striped table-bordered table-hover" id="postsview" style="width:100%">
+    <thead>
+      <tr>
+        <th scope="col">Post ID</th>        
+        <th scope="col">Description</th>
+        <th scope="col">Image Name</th>
+        <th scope="col">Updated@</th>
+        <th scope="col">User ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in Posts %}
+      <tr>
+        <td scope="row">{{ post['post_id'] }}</td>
+        <td scope="row">{{ post['description'] }}</td>
+        <td scope="row">{{ post['image_path'] }}</td>
+        <td scope="row">{{ post['updated_at'] }}</td>
+        <td scope="row">{{ post['user_id'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}
