@@ -78,6 +78,33 @@ def dbview():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENTIONS
 
+@app.route("/uploadimg", methods=["GET", "POST"])
+def uploadimg():
+    user = UserModel.find_by_id(user_id=session['user_id'])
+
+    if request.method == "POST":
+        description = request.form.get('description')
+        file = request.files['file']
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            static_path = os.path.join('static', 'images')
+            # file save
+            abs_path = os.path.join(os.getcwd(), static_path)
+            local_path = os.path.join(abs_path, filename)
+            file.save(local_path)
+            # db update
+            relative_path = os.path.join('.', static_path)
+            url_path = os.path.join(relative_path, filename)
+            post = Posts(description=description, image_path=url_path, user_id=user.user_id)
+            post.save()
+            flash("Successfully uploaded!", "success")
+            return render_template("dbview.html", Users = UserModel.get_list_of_dict(), Posts = Posts.get_list_of_dict(), dbview=True)
+        else:
+            flash("Somethings went wrong!", "danger")
+
+    return render_template("uploadimg.html", uploadimg=True)
+
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():

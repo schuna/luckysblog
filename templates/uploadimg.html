@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-sm mt-5">
+
+    <h4 class="mb-3">Upload File</h4>
+
+    <form method="POST" enctype="multipart/form-data" role="form" class="needs-validation" novalidate>
+        <div class="col-md-6 mb-3">
+            <label for="description" class="sr-only">Description</label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="Description" required autofocus>
+            <div class="invalid-feedback">
+                Valid description is required.
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="file" class="sr-only">Image File</label>
+                <input type="file" name="file" id="file" class="form-control" autofocus>
+            </div>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+    </form>
+</div>
+
+{% endblock %}
