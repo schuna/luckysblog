@@ -3,6 +3,7 @@ from sqlalchemy.sql import func
 import os
 from datetime import datetime
 
+
 class Posts(db.Model):
     __tablename__ = 'posts'
 
@@ -22,7 +23,7 @@ class Posts(db.Model):
 
     @classmethod
     def get_list_of_dict(cls):
-        return [r.__dict__ for r in cls.query.filter_by().order_by(Posts.post_id.desc()).all()]
+        return [r.__dict__ for r in cls.query.filter_by().all()]
 
     @classmethod
     def find_by_id(cls, post_id):

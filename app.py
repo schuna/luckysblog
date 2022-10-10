@@ -1,27 +1,33 @@
 import os
-import logging
 
-from flask import Flask, request, jsonify, render_template, request, session, redirect, flash, url_for
-from security import authenticate, identity as identity_function
+from flask import Flask, render_template, request, session, redirect, flash, url_for
 from werkzeug.utils import secure_filename
 
-from models.user import UserModel
 from models.post import Posts
+from models.user import UserModel
+from db import db
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.secret_key = 'jiyong'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-ALLOWED_EXTENTIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENTIONS = ['png', 'jpg', 'jpeg', 'gif']
+
+db.init_app(app)
+if app.config['DEBUG']:
+    @app.before_first_request
+    def create_tables():
+        db.create_all()
 
 
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
 def index():
-    return render_template("index.html", Posts = Posts.get_list_of_dict(), index=True)
+    return render_template("index.html", Posts=Posts.get_list_of_dict(), index=True)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -47,8 +53,8 @@ def logout():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    if not session.get('username'):
-        return redirect(url_for('index'))
+    # if not session.get('username'):
+    #     return redirect(url_for('index'))
 
     if request.method == 'POST':
         user_id = UserModel.count()
@@ -72,11 +78,13 @@ def dbview():
     data = []
     if not session.get('username'):
         return redirect(url_for('index'))
-    return render_template("dbview.html", Users = UserModel.get_list_of_dict(), Posts = Posts.get_list_of_dict(), dbview=True)
+    return render_template("dbview.html", Users=UserModel.get_list_of_dict(), Posts=Posts.get_list_of_dict(),
+                           dbview=True)
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENTIONS
+
 
 @app.route("/uploadimg", methods=["GET", "POST"])
 def uploadimg():
@@ -99,7 +107,8 @@ def uploadimg():
             post = Posts(description=description, image_path=url_path, user_id=user.user_id)
             post.save()
             flash("Successfully uploaded!", "success")
-            return render_template("dbview.html", Users = UserModel.get_list_of_dict(), Posts = Posts.get_list_of_dict(), dbview=True)
+            return render_template("dbview.html", Users=UserModel.get_list_of_dict(), Posts=Posts.get_list_of_dict(),
+                                   dbview=True)
         else:
             flash("Somethings went wrong!", "danger")
 
@@ -118,7 +127,8 @@ def upload():
             post = Posts(description=description, image_path=image_path, user_id=user.user_id)
             post.save()
             flash("Successfully uploaded!", "success")
-            return render_template("dbview.html", Users = UserModel.get_list_of_dict(), Posts = Posts.get_list_of_dict(), dbview=True)
+            return render_template("dbview.html", Users=UserModel.get_list_of_dict(), Posts=Posts.get_list_of_dict(),
+                                   dbview=True)
         except:
             flash("Somethings went wrong!", "danger")
             return redirect(url_for('index'))
@@ -139,11 +149,4 @@ def delete(post_id):
 
 
 if __name__ == '__main__':
-    from db import db
-    db.init_app(app)
-    if app.config['DEBUG']:
-        @app.before_first_request
-        def create_tables():
-            db.create_all()
-
     app.run(host='0.0.0.0', port=5000)
